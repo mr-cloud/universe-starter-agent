@@ -1,0 +1,8 @@
+--num-workers \
+4 \
+--env-id \
+gym-core.PongDeterministic-v3 \
+--log-dir \
+/tmp/vncpong \
+-r \
+vnc://192.168.1.47:5900+15900,vnc://192.168.1.47:5901+15901,vnc://192.168.1.47:5902+15902,vnc://192.168.1.47:5903+15903

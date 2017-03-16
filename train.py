@@ -1,6 +1,8 @@
 import argparse
 import os
 import sys
+# envs|tensorborad dir
+# gym-core.PongDeterministic-v3|/tmp/vncpong
 
 parser = argparse.ArgumentParser(description="Run commands")
 parser.add_argument('-w', '--num-workers', default=1, type=int,
@@ -22,7 +24,7 @@ def new_tmux_cmd(session, name, cmd):
 
 def create_tmux_commands(session, num_workers, remotes, env_id, logdir):
     # for launching the TF workers and for launching tensorboard
-    base_cmd = [
+    base_cmd = ['source activate mlgb-lab &&',
         'CUDA_VISIBLE_DEVICES=', sys.executable, 'worker.py',
         '--log-dir', logdir, '--env-id', env_id,
         '--num-workers', str(num_workers)]
@@ -38,7 +40,7 @@ def create_tmux_commands(session, num_workers, remotes, env_id, logdir):
         cmds_map += [new_tmux_cmd(session,
             "w-%d" % i, base_cmd + ["--job-name", "worker", "--task", str(i), "--remotes", remotes[i]])]
 
-    cmds_map += [new_tmux_cmd(session, "tb", ["tensorboard --logdir {} --port 12345".format(logdir)])]
+    cmds_map += [new_tmux_cmd(session, "tb", ["source activate mlgb-lab && tensorboard --logdir {} --port 12345".format(logdir)])]
     cmds_map += [new_tmux_cmd(session, "htop", ["htop"])]
 
     windows = [v[0] for v in cmds_map]
